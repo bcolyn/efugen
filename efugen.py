@@ -14,16 +14,16 @@ def print_file(full_file, output, root, prefix, attrib):
     size = stat.st_size
     win_ctime = EPOCH_DELTA + int(stat.st_ctime_ns / 100)
     win_mtime = EPOCH_DELTA + int(stat.st_mtime_ns / 100)
-    path = mkpath(full_file, root, prefix)
+    path = mkpath(full_file, root, prefix).replace("/", "\\")
     output.write(f"\"{path}\",{size},{win_mtime},{win_ctime},{attrib}\n")
 
 
-def mkpath(full_file, root, prefix):
+def mkpath(full_file, root, prefix) -> str:
     relpath = os.path.relpath(full_file, root)
     if prefix:
         return prefix + relpath
     else:
-        return relpath
+        return str(relpath)
 
 
 def walk_tree(path: pathlib.Path, output: io.TextIOWrapper, prefix: str):
